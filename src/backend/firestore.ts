@@ -1,0 +1,216 @@
+import {
+     doc,
+     setDoc,
+     getDoc,
+     updateDoc,
+     deleteDoc,
+     collection,
+     getDocs,
+     serverTimestamp,
+     type Timestamp,
+} from "firebase/firestore";
+import { db } from "./firebase";
+
+// ── Types ──────────────────────────────────────────────────────────────
+
+export interface UserProfile {
+     name: string;
+     email: string;
+     university: string;
+     avatar: string;
+     bio: string;
+     memberSince: Timestamp | string;
+     signupMethod: "email" | "google";
+}
+
+// ── User Profile ───────────────────────────────────────────────────────
+
+/**
+ * Create a user profile document in Firestore.
+ * Called on first signup (email/password or Google).
+ * Uses the Firebase Auth UID as the document ID.
+ */
+export async function createUserProfile(
+     uid: string,
+     data: {
+          name: string;
+          email: string;
+          university: string;
+          avatar: string;
+          signupMethod: "email" | "google";
+     }
+) {
+     const ref = doc(db, "users", uid);
+
+     // Don't overwrite if the profile already exists
+     const existing = await getDoc(ref);
+     if (existing.exists()) return existing.data() as UserProfile;
+
+     const profile: UserProfile = {
+          name: data.name,
+          email: data.email,
+          university: data.university,
+          avatar: data.avatar,
+          bio: "",
+          memberSince: serverTimestamp() as unknown as Timestamp,
+          signupMethod: data.signupMethod,
+     };
+
+     await setDoc(ref, profile);
+     return profile;
+}
+
+/**
+ * Get a user profile from Firestore by UID.
+ */
+export async function getUserProfile(uid: string): Promise<UserProfile | null> {
+     const ref = doc(db, "users", uid);
+     const snap = await getDoc(ref);
+     return snap.exists() ? (snap.data() as UserProfile) : null;
+}
+
+/**
+ * Update specific fields of a user profile.
+ */
+export async function updateUserProfile(
+     uid: string,
+     data: Partial<Pick<UserProfile, "name" | "bio" | "avatar" | "university">>
+) {
+     const ref = doc(db, "users", uid);
+     await updateDoc(ref, data);
+}
+
+/**
+ * Check if an email was registered via email/password signup.
+ * Used to block Google sign-in for duplicate emails.
+ */
+export async function isEmailSignupAccount(email: string): Promise<boolean> {
+     // We search all users — in production you'd use a query, but for a small app
+     // we can check by iterating. For better perf, we'll use a dedicated collection.
+     const usersRef = collection(db, "users");
+     const snapshot = await getDocs(usersRef);
+
+     for (const userDoc of snapshot.docs) {
+          const data = userDoc.data() as UserProfile;
+          if (
+               data.email.toLowerCase() === email.toLowerCase() &&
+               data.signupMethod === "email"
+          ) {
+               return true;
+          }
+     }
+     return false;
+}
+
+// ── Saved / Liked Listings ─────────────────────────────────────────────
+
+/**
+ * Save (like) a listing for a user.
+ */
+export async function saveListing(uid: string, listingId: string) {
+     const ref = doc(db, "users", uid, "savedListings", listingId);
+     await setDoc(ref, { savedAt: serverTimestamp() });
+}
+
+/**
+ * Unsave (unlike) a listing for a user.
+ */
+export async function unsaveListing(uid: string, listingId: string) {
+     const ref = doc(db, "users", uid, "savedListings", listingId);
+     await deleteDoc(ref);
+}
+
+/**
+ * Get all saved listing IDs for a user.
+ */
+export async function getSavedListingIds(uid: string): Promise<string[]> {
+     const colRef = collection(db, "users", uid, "savedListings");
+     const snapshot = await getDocs(colRef);
+     return snapshot.docs.map((d) => d.id);
+}
+
+/**
+ * Check if a specific listing is saved by the user.
+ */
+export async function isListingSaved(
+     uid: string,
+     listingId: string
+): Promise<boolean> {
+     const ref = doc(db, "users", uid, "savedListings", listingId);
+     const snap = await getDoc(ref);
+     return snap.exists();
+}
+
+// ── Search History ─────────────────────────────────────────────────────
+
+export interface SearchHistoryItem {
+     id: string;
+     query: string;
+     searchedAt: Timestamp | string;
+     hiddenFromUI: boolean;
+}
+
+/**
+ * Save a search query to the user's search history in Firestore.
+ * Avoids duplicates — if same query exists (not hidden), updates timestamp.
+ */
+export async function saveSearch(uid: string, query: string) {
+     const trimmed = query.trim();
+     if (!trimmed) return;
+
+     // Use query as a slug-based ID to avoid duplicates
+     const id = trimmed.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "").slice(0, 80);
+     const ref = doc(db, "users", uid, "searchHistory", id);
+
+     await setDoc(ref, {
+          query: trimmed,
+          searchedAt: serverTimestamp(),
+          hiddenFromUI: false,
+     }, { merge: true });
+}
+
+/**
+ * Get all visible search history items for a user (hiddenFromUI = false).
+ * Returns newest first, max 10.
+ */
+export async function getVisibleSearchHistory(uid: string): Promise<SearchHistoryItem[]> {
+     const colRef = collection(db, "users", uid, "searchHistory");
+     const snapshot = await getDocs(colRef);
+
+     const items: SearchHistoryItem[] = snapshot.docs
+          .map((d) => ({ id: d.id, ...d.data() } as SearchHistoryItem))
+          .filter((item) => !item.hiddenFromUI)
+          .sort((a, b) => {
+               const aTime = typeof a.searchedAt === "string" ? new Date(a.searchedAt).getTime() : (a.searchedAt as Timestamp).toMillis();
+               const bTime = typeof b.searchedAt === "string" ? new Date(b.searchedAt).getTime() : (b.searchedAt as Timestamp).toMillis();
+               return bTime - aTime;
+          })
+          .slice(0, 10);
+
+     return items;
+}
+
+/**
+ * Hide a single search history item from the UI.
+ * Data stays in Firestore — only hiddenFromUI flag is set to true.
+ */
+export async function hideSearchItem(uid: string, itemId: string) {
+     const ref = doc(db, "users", uid, "searchHistory", itemId);
+     await updateDoc(ref, { hiddenFromUI: true });
+}
+
+/**
+ * Hide ALL search history from the UI.
+ * Data stays in Firestore — only hiddenFromUI flags are set to true.
+ */
+export async function hideAllSearchHistory(uid: string) {
+     const colRef = collection(db, "users", uid, "searchHistory");
+     const snapshot = await getDocs(colRef);
+
+     const updates = snapshot.docs
+          .filter((d) => !d.data().hiddenFromUI)
+          .map((d) => updateDoc(d.ref, { hiddenFromUI: true }));
+
+     await Promise.all(updates);
+}
+
