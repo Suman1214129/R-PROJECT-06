@@ -1,0 +1,121 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --color-background: #FFFFFF;
+  --color-surface: #FAFAFA;
+  --color-surface-2: #F5F5F0;
+  --color-surface-warm: #F8F6F1;
+  --color-border: #E8E6E1;
+  --color-border-hover: #D4D2CD;
+  --color-primary: #1A1A1A;
+  --color-primary-hover: #2D2D2D;
+  --color-primary-light: #F5F5F0;
+  --color-accent: #4F46E5;
+  --color-accent-light: #EEF2FF;
+  --color-success: #059669;
+  --color-success-light: #ECFDF5;
+  --color-warning: #D97706;
+  --color-warning-light: #FFFBEB;
+  --color-danger: #DC2626;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #3D3D3D;
+  --color-text-muted: #6B6B6B;
+  --color-text-light: #9B9B9B;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: 'Instrument Serif', 'Georgia', serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4D2CD;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9B9B9B;
+}
+
+::selection {
+  background-color: rgba(26, 26, 26, 0.08);
+  color: #1A1A1A;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-dot {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.35s ease-out;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #F5F5F0 25%, #E8E6E1 50%, #F5F5F0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
