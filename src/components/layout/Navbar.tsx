@@ -22,12 +22,12 @@ export function Navbar() {
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-14">
-          {/* Logo */}
+          {/* Logo — Playfair Display */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0">
-            <span className="font-serif text-xl italic text-text-primary">CampusSwap</span>
+            <span className="font-serif text-xl font-bold text-text-primary tracking-tight">CampusSwap</span>
           </Link>
 
-          {/* Desktop Nav */}
+          {/* Desktop Nav — Grey active chips */}
           <nav className="hidden md:flex items-center gap-1 ml-8">
             {navItems.map((item) => {
               const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
@@ -36,8 +36,8 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   className={`px-3.5 py-1.5 rounded-full text-[13px] font-medium tracking-wide transition-all ${isActive
-                      ? "text-text-primary bg-surface-2"
-                      : "text-text-muted hover:text-text-primary"
+                    ? "text-text-primary bg-surface-2"
+                    : "text-text-muted hover:text-text-primary hover:bg-surface/80"
                     }`}
                 >
                   {item.label}
@@ -58,9 +58,10 @@ export function Navbar() {
             </button>
 
             {/* Notifications */}
-            <button className="relative p-2 rounded-full text-text-muted hover:text-text-primary hover:bg-surface-2 transition-all">
+            <Link href="/notifications" className="relative p-2 rounded-full text-text-muted hover:text-text-primary hover:bg-surface-2 transition-all">
               <Bell className="w-[18px] h-[18px]" />
-            </button>
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-accent" />
+            </Link>
 
             {/* Wallet Button */}
             {isConnected ? (
@@ -76,15 +77,15 @@ export function Navbar() {
             ) : (
               <button
                 onClick={() => setShowConnectModal(true)}
-                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary hover:bg-primary-hover text-white text-[13px] font-medium tracking-wide transition-all active:scale-[0.97] ml-1"
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent hover:bg-accent-hover text-white text-[13px] font-medium tracking-wide transition-all active:scale-[0.97] ml-1"
               >
                 <Wallet className="w-3.5 h-3.5" />
                 <span className="hidden sm:block">Connect</span>
               </button>
             )}
 
-            {/* Profile */}
-            <Link href="/profile/seller-1" className="hidden md:flex ml-0.5">
+            {/* Profile — Personal profile */}
+            <Link href="/profile" className="hidden md:flex ml-0.5">
               <div className="w-8 h-8 rounded-full bg-surface-2 border border-border flex items-center justify-center hover:border-border-hover transition-all">
                 <User className="w-4 h-4 text-text-muted" />
               </div>
@@ -92,7 +93,7 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Nav — Inline row */}
+        {/* Mobile Nav — Grey active chips */}
         <nav className="flex md:hidden items-center gap-1 pb-2 overflow-x-auto scrollbar-hide -mx-1 px-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
@@ -101,8 +102,8 @@ export function Navbar() {
                 key={item.href}
                 href={item.href}
                 className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all ${isActive
-                    ? "text-text-primary bg-surface-2"
-                    : "text-text-muted hover:text-text-primary"
+                  ? "text-text-primary bg-surface-2"
+                  : "text-text-muted hover:text-text-primary"
                   }`}
               >
                 {item.label}
@@ -110,10 +111,10 @@ export function Navbar() {
             );
           })}
           <Link
-            href="/profile/seller-1"
-            className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all ${pathname.startsWith("/profile")
-                ? "text-text-primary bg-surface-2"
-                : "text-text-muted hover:text-text-primary"
+            href="/profile"
+            className={`px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all ${pathname === "/profile"
+              ? "text-text-primary bg-surface-2"
+              : "text-text-muted hover:text-text-primary"
               }`}
           >
             Profile
