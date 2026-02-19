@@ -9,7 +9,7 @@ import { VerifiedBadge } from "@/components/ui/VerifiedBadge";
 import { ProductCard } from "@/components/marketplace/ProductCard";
 import { formatDate } from "@/lib/utils";
 
-export default function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
+export default function SellerProfilePage({ params }: { params: Promise<{ id: string }> }) {
      const { id } = use(params);
      const seller = getSellerById(id);
      const [activeTab, setActiveTab] = useState("listings");
@@ -17,7 +17,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
      if (!seller) {
           return (
                <div className="max-w-7xl mx-auto px-4 py-20 text-center">
-                    <h1 className="font-serif text-2xl text-text-primary italic mb-4">Profile not found</h1>
+                    <h1 className="font-serif text-2xl text-text-primary mb-4">Seller not found</h1>
                     <Link href="/" className="text-accent hover:underline">Back to marketplace</Link>
                </div>
           );
@@ -34,8 +34,8 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                {/* Header */}
                <div className="relative rounded-2xl overflow-hidden mb-8">
-                    <div className="h-32 sm:h-44 bg-surface-warm relative">
-                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(0,0,0,0.03)_0%,transparent_50%)]" />
+                    <div className="h-32 sm:h-44 bg-gradient-to-r from-surface-2 via-accent-light to-surface-2 relative">
+                         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(37,99,235,0.04)_0%,transparent_50%)]" />
                     </div>
                     <div className="bg-white border border-border border-t-0 rounded-b-2xl px-6 pb-6 pt-0">
                          <div className="flex flex-col sm:flex-row sm:items-end gap-4 -mt-10">
@@ -46,7 +46,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                               </div>
                               <div className="flex-1">
                                    <div className="flex items-center gap-2">
-                                        <h1 className="font-serif text-xl text-text-primary italic">{seller.name}</h1>
+                                        <h1 className="font-serif text-xl font-semibold text-text-primary">{seller.name}</h1>
                                         {seller.isVerified && <VerifiedBadge />}
                                    </div>
                                    <div className="flex items-center gap-3 text-sm text-text-muted mt-1">
@@ -77,7 +77,7 @@ export default function ProfilePage({ params }: { params: Promise<{ id: string }
                     {tabs.map((tab) => (
                          <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`relative px-5 py-3 text-[13px] font-medium transition-colors ${activeTab === tab.id ? "text-text-primary" : "text-text-muted hover:text-text-primary"}`}>
                               {tab.label}
-                              {activeTab === tab.id && <motion.div layoutId="profileTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-text-primary" />}
+                              {activeTab === tab.id && <motion.div layoutId="sellerTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent" />}
                          </button>
                     ))}
                </div>

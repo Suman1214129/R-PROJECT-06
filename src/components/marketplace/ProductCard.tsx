@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Bookmark, Eye } from "lucide-react";
 import { Listing, getSellerById } from "@/lib/mock-data";
 import { CryptoAmount } from "@/components/ui/CryptoAmount";
 import { timeAgo } from "@/lib/utils";
+import { useAuthStore } from "@/store/auth";
+import { saveListing, unsaveListing, isListingSaved } from "@/backend/firestore";
 
 interface ProductCardProps {
      listing: Listing;
@@ -14,8 +16,37 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ listing, index = 0 }: ProductCardProps) {
-     const [saved, setSaved] = useState(listing.isSaved || false);
+     const { user } = useAuthStore();
+     const [saved, setSaved] = useState(false);
+     const [saving, setSaving] = useState(false);
      const seller = getSellerById(listing.sellerId);
+
+     // Check if listing is saved on mount
+     useEffect(() => {
+          if (!user?.uid) return;
+          isListingSaved(user.uid, listing.id).then(setSaved).catch(() => { });
+     }, [user?.uid, listing.id]);
+
+     const handleToggleSave = async (e: React.MouseEvent) => {
+          e.preventDefault();
+          e.stopPropagation();
+          if (!user?.uid || saving) return;
+
+          setSaving(true);
+          try {
+               if (saved) {
+                    await unsaveListing(user.uid, listing.id);
+                    setSaved(false);
+               } else {
+                    await saveListing(user.uid, listing.id);
+                    setSaved(true);
+               }
+          } catch (err) {
+               console.error("Failed to toggle save:", err);
+          } finally {
+               setSaving(false);
+          }
+     };
 
      const conditionColors: Record<string, string> = {
           "Like New": "bg-emerald-50 text-emerald-700",
@@ -47,7 +78,8 @@ export function ProductCard({ listing, index = 0 }: ProductCardProps) {
 
                               {/* Save */}
                               <button
-                                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSaved(!saved); }}
+                                   onClick={handleToggleSave}
+                                   disabled={saving}
                                    className={`absolute top-2.5 right-2.5 p-1.5 rounded-lg transition-all ${saved ? "bg-primary/10 text-primary" : "bg-white/80 backdrop-blur-sm text-text-muted hover:text-primary"
                                         }`}
                               >

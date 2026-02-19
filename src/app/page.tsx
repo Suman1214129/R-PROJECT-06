@@ -70,7 +70,7 @@ export default function MarketplacePage() {
     <div>
       {/* Hero Section */}
       <section className="relative bg-surface-warm">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,0,0,0.02)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(37,99,235,0.03)_0%,transparent_70%)]" />
         <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-12 sm:pb-16 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -78,10 +78,10 @@ export default function MarketplacePage() {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <h1 className="font-serif text-4xl sm:text-6xl text-text-primary tracking-tight italic">
+            <h1 className="font-serif text-4xl sm:text-6xl text-text-primary tracking-tight">
               Buy & sell on campus
             </h1>
-            <p className="text-base sm:text-lg text-text-muted mt-4 max-w-md mx-auto font-light">
+            <p className="text-base sm:text-lg text-text-muted mt-4 max-w-md mx-auto">
               The peer-to-peer marketplace for students. Powered by Algorand.
             </p>
           </motion.div>
@@ -95,9 +95,9 @@ export default function MarketplacePage() {
           >
             <button
               onClick={() => setSearchOpen(true)}
-              className="w-full flex items-center gap-3 px-6 py-4 sm:py-5 rounded-2xl bg-white border border-border text-left hover:border-border-hover hover:shadow-lg hover:shadow-black/5 transition-all group cursor-text"
+              className="w-full flex items-center gap-3 px-6 py-4 sm:py-5 rounded-2xl bg-white border border-border text-left hover:border-accent/30 hover:shadow-lg hover:shadow-accent/5 transition-all group cursor-text"
             >
-              <Search className="w-5 h-5 text-text-light group-hover:text-text-muted transition-colors" />
+              <Search className="w-5 h-5 text-text-light group-hover:text-accent transition-colors" />
               <span className="flex-1 text-base text-text-light">Search for textbooks, electronics, furniture...</span>
               <kbd className="hidden sm:inline-flex h-6 items-center gap-0.5 rounded-md border border-border bg-surface px-2 text-[10px] font-mono text-text-light">
                 ⌘K
@@ -125,8 +125,8 @@ export default function MarketplacePage() {
               className="group text-left"
             >
               <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden mb-2.5 transition-all ${activeCategory === cat.id
-                  ? "ring-2 ring-text-primary ring-offset-2"
-                  : "hover:shadow-md hover:shadow-black/10"
+                ? "ring-2 ring-accent ring-offset-2"
+                : "hover:shadow-md hover:shadow-black/10"
                 }`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -137,8 +137,8 @@ export default function MarketplacePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               </div>
               <span className={`inline-block px-3 py-1 rounded-full text-[12px] font-medium transition-all ${activeCategory === cat.id
-                  ? "bg-text-primary text-white"
-                  : "bg-surface-2 text-text-muted group-hover:bg-text-primary group-hover:text-white"
+                ? "bg-accent text-white"
+                : "bg-surface-2 text-text-muted group-hover:bg-accent/10 group-hover:text-accent"
                 }`}>
                 {cat.title}
               </span>
@@ -156,8 +156,8 @@ export default function MarketplacePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-10 sm:py-12">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
-            <Sparkles className="w-4 h-4 text-text-light" />
-            <h2 className="font-serif text-xl sm:text-2xl text-text-primary italic">
+            <Sparkles className="w-4 h-4 text-accent" />
+            <h2 className="font-serif text-xl sm:text-2xl text-text-primary">
               Recommended for you
             </h2>
             <span className="text-xs text-text-light bg-surface-2 px-2.5 py-1 rounded-full">
@@ -171,7 +171,7 @@ export default function MarketplacePage() {
             <SlidersHorizontal className="w-4 h-4" />
             Filters
             {activeCategory !== "all" && (
-              <span className="w-4 h-4 rounded-full bg-primary text-white text-[9px] font-bold flex items-center justify-center ml-0.5">
+              <span className="w-4 h-4 rounded-full bg-accent text-white text-[9px] font-bold flex items-center justify-center ml-0.5">
                 1
               </span>
             )}
@@ -184,10 +184,10 @@ export default function MarketplacePage() {
             <span className="text-[11px] text-text-light uppercase tracking-wider">Filtered:</span>
             <button
               onClick={() => setActiveCategory("all")}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-2 border border-border text-xs text-text-muted hover:border-border-hover transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-light border border-accent/20 text-xs text-accent hover:bg-accent/10 transition-all"
             >
               {activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)}
-              <span className="text-text-light">×</span>
+              <span>×</span>
             </button>
           </div>
         )}
@@ -201,13 +201,13 @@ export default function MarketplacePage() {
 
         {filteredListings.length === 0 && (
           <div className="text-center py-20">
-            <p className="font-serif text-xl text-text-muted italic">No listings found</p>
+            <p className="font-serif text-xl text-text-muted">No listings found</p>
             <p className="text-sm text-text-light mt-2">Try removing some filters</p>
           </div>
         )}
       </section>
 
-      {/* Filters */}
+      {/* Filters — Left Sidebar */}
       <FiltersPanel
         isOpen={filtersOpen}
         onClose={() => setFiltersOpen(false)}
