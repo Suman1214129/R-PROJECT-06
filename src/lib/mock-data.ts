@@ -276,23 +276,6 @@ export const listings: Listing[] = [
           createdAt: "2025-02-07T13:30:00Z",
      },
      {
-          id: "listing-7",
-          title: "Electric Scooter — Xiaomi Mi Pro 2",
-          description: "Max speed 25km/h, 45km range. Foldable, very portable. Used for one semester of commuting. New tires installed last month.",
-          price: 280,
-          category: "transport",
-          condition: "Good",
-          images: [
-               "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=600&fit=crop",
-               "https://images.unsplash.com/photo-1604868189414-2f8fc6c5e09a?w=600&h=600&fit=crop",
-          ],
-          sellerId: "seller-5",
-          tags: ["scooter", "electric", "transport"],
-          views: 312,
-          status: "Active",
-          createdAt: "2025-02-09T10:00:00Z",
-     },
-     {
           id: "listing-8",
           title: "Organic Chemistry 9th Edition — McMurry",
           description: "Required text for CHEM 201. No writing or highlighting. Comes with the model kit (unused).",
