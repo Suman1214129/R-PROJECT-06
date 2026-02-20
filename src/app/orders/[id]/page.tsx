@@ -32,7 +32,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
 
                <div className="flex items-start justify-between mb-8">
                     <div>
-                         <h1 className="font-serif text-2xl text-text-primary italic">Order #{order.id.slice(-4)}</h1>
+                         <h1 className="font-serif text-2xl text-text-primary italic">Ord{order.id.slice(-4)}</h1>
                          <div className="flex items-center gap-3 mt-2">
                               <OrderStatusBadge status={order.status} />
                               <span className="text-xs text-text-muted">Placed {formatDate(order.createdAt)}</span>

@@ -43,11 +43,11 @@ export function MessagesDialog({ isOpen, onClose }: MessagesDialogProps) {
 
                          {/* Dialog */}
                          <motion.div
-                              initial={{ opacity: 0, y: 20, scale: 0.97 }}
-                              animate={{ opacity: 1, y: 0, scale: 1 }}
-                              exit={{ opacity: 0, y: 20, scale: 0.97 }}
-                              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                              className="fixed z-[81] right-4 sm:right-6 bottom-4 sm:bottom-6 w-[calc(100%-2rem)] sm:w-[420px] h-[70vh] max-h-[600px] bg-white rounded-2xl border border-border shadow-2xl shadow-black/10 flex flex-col overflow-hidden"
+                              initial={{ x: "100%" }}
+                              animate={{ x: 0 }}
+                              exit={{ x: "100%" }}
+                              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                              className="fixed z-[81] right-0 top-0 bottom-0 w-[calc(100%-2rem)] sm:w-[420px] my-4 mr-4 bg-white rounded-2xl border border-border shadow-2xl flex flex-col overflow-hidden"
                          >
                               {activeConversation ? (
                                    /* Chat View */
@@ -162,12 +162,12 @@ export function MessagesDialog({ isOpen, onClose }: MessagesDialogProps) {
                                         </div>
 
                                         {/* List */}
-                                        <div className="flex-1 overflow-y-auto divide-y divide-border">
+                                        <div className="flex-1 overflow-y-auto">
                                              {conversations.map((conv) => (
                                                   <button
                                                        key={conv.id}
                                                        onClick={() => setActiveConversation(conv)}
-                                                       className="w-full flex items-start gap-3 p-4 text-left hover:bg-surface transition-colors"
+                                                       className="w-full flex items-start gap-3 p-4 text-left hover:bg-surface transition-colors border-b border-border"
                                                   >
                                                        <div className="relative shrink-0">
                                                             {/* eslint-disable-next-line @next/next/no-img-element */}

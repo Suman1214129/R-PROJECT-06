@@ -14,7 +14,7 @@ export function CheckoutBox({ listingId, price }: CheckoutBoxProps) {
      const { isConnected, setShowConnectModal } = useWalletStore();
 
      return (
-          <div className="rounded-2xl border border-border bg-white p-5 sticky top-20">
+          <div className="rounded-2xl border border-border bg-white p-5">
                <CryptoAmount amount={price} size="xl" className="mb-5" />
 
                {isConnected ? (

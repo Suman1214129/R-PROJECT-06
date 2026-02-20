@@ -6,6 +6,8 @@ import {
      deleteDoc,
      collection,
      getDocs,
+     query,
+     where,
      serverTimestamp,
      type Timestamp,
 } from "firebase/firestore";
@@ -212,5 +214,100 @@ export async function hideAllSearchHistory(uid: string) {
           .map((d) => updateDoc(d.ref, { hiddenFromUI: true }));
 
      await Promise.all(updates);
+}
+
+// ── Listings ───────────────────────────────────────────────────────────
+
+export interface ListingData {
+     id: string;
+     title: string;
+     description: string;
+     price: number;
+     category: string;
+     condition: "Like New" | "Good" | "Fair";
+     images: string[];
+     sellerId: string;
+     tags: string[];
+     views: number;
+     status: "Active" | "Paused" | "Sold";
+     createdAt: Timestamp | string;
+}
+
+/**
+ * Create a new listing in Firestore.
+ */
+export async function createListing(
+     uid: string,
+     data: {
+          title: string;
+          description: string;
+          price: number;
+          category: string;
+          condition: "Like New" | "Good" | "Fair";
+          images: string[];
+          tags: string[];
+     }
+): Promise<string> {
+     const listingsRef = collection(db, "listings");
+     const newListingRef = doc(listingsRef);
+
+     const listing: Omit<ListingData, "id"> = {
+          title: data.title,
+          description: data.description,
+          price: data.price,
+          category: data.category,
+          condition: data.condition,
+          images: data.images,
+          sellerId: uid,
+          tags: data.tags,
+          views: 0,
+          status: "Active",
+          createdAt: serverTimestamp() as unknown as Timestamp,
+     };
+
+     await setDoc(newListingRef, listing);
+     return newListingRef.id;
+}
+
+/**
+ * Get all listings for a specific seller.
+ */
+export async function getListingsBySeller(uid: string): Promise<ListingData[]> {
+     const listingsRef = collection(db, "listings");
+     const q = query(listingsRef, where("sellerId", "==", uid));
+     const snapshot = await getDocs(q);
+
+     return snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+     })) as ListingData[];
+}
+
+/**
+ * Get a single listing by ID.
+ */
+export async function getListingById(listingId: string): Promise<ListingData | null> {
+     const ref = doc(db, "listings", listingId);
+     const snap = await getDoc(ref);
+     return snap.exists() ? ({ id: snap.id, ...snap.data() } as ListingData) : null;
+}
+
+/**
+ * Update listing status (Active, Paused, Sold).
+ */
+export async function updateListingStatus(
+     listingId: string,
+     status: "Active" | "Paused" | "Sold"
+) {
+     const ref = doc(db, "listings", listingId);
+     await updateDoc(ref, { status });
+}
+
+/**
+ * Delete a listing.
+ */
+export async function deleteListing(listingId: string) {
+     const ref = doc(db, "listings", listingId);
+     await deleteDoc(ref);
 }
 

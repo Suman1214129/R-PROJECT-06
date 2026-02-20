@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Search, SlidersHorizontal, Sparkles, GraduationCap } from "lucide-react";
 import { listings } from "@/lib/mock-data";
@@ -50,7 +50,25 @@ export default function MarketplacePage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [sort, setSort] = useState("latest");
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  // Close search when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setSearchOpen(false);
+      }
+    };
+
+    if (searchOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [searchOpen]);
 
   const filteredListings = useMemo(() => {
     let result = listings.filter((l) => l.status === "Active");
@@ -88,10 +106,11 @@ export default function MarketplacePage() {
 
           {/* Hero Search Button */}
           <motion.div
+            ref={searchRef}
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
-            className="mt-10 sm:mt-12 max-w-2xl mx-auto"
+            className="mt-10 sm:mt-12 max-w-2xl mx-auto relative"
           >
             <button
               onClick={() => setSearchOpen(true)}
@@ -103,6 +122,14 @@ export default function MarketplacePage() {
                 ⌘K
               </kbd>
             </button>
+            
+            {/* Search Dialog positioned below */}
+            <SearchDialog 
+              isOpen={searchOpen} 
+              onClose={() => setSearchOpen(false)} 
+              query={searchQuery}
+              onQueryChange={setSearchQuery}
+            />
           </motion.div>
         </div>
       </section>
@@ -216,9 +243,6 @@ export default function MarketplacePage() {
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
       />
-
-      {/* Search Dialog */}
-      <SearchDialog isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
   );
 }

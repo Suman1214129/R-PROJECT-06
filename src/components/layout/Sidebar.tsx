@@ -2,14 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, Plus, BarChart3, Settings, ChevronLeft, ChevronRight } from "lucide-react";
+import { Package, Plus, BarChart3, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
      { href: "/dashboard/listings", label: "Listings", icon: Package },
      { href: "/dashboard/listings/new", label: "New Listing", icon: Plus },
-     { href: "/orders", label: "Orders", icon: BarChart3 },
-     { href: "/messages", label: "Messages", icon: LayoutDashboard },
 ];
 
 export function Sidebar() {

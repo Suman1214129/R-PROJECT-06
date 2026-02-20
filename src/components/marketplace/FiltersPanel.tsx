@@ -35,7 +35,7 @@ const categoryOptions = [
 
 export function FiltersPanel({ isOpen, onClose, sort, onSortChange, activeCategory, onCategoryChange }: FiltersPanelProps) {
      const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
-     const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+     const [priceRange, setPriceRange] = useState<[string, string]>(["", ""]);
 
      const toggleCondition = (c: string) => {
           setSelectedConditions((prev) =>
@@ -55,61 +55,58 @@ export function FiltersPanel({ isOpen, onClose, sort, onSortChange, activeCatego
                               className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
                          />
                          <motion.div
-                              initial={{ y: "100%" }}
-                              animate={{ y: 0 }}
-                              exit={{ y: "100%" }}
-                              transition={{ type: "spring", damping: 28, stiffness: 350 }}
-                              className="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl border-t border-border"
+                              initial={{ x: "-100%" }}
+                              animate={{ x: 0 }}
+                              exit={{ x: "-100%" }}
+                              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                              className="fixed inset-y-0 left-0 z-50 w-80 bg-white/95 backdrop-blur-xl border-r border-border/50 shadow-2xl flex flex-col overflow-hidden"
                          >
-                              {/* Handle */}
-                              <div className="flex justify-center pt-2.5 pb-0.5">
-                                   <div className="w-8 h-1 rounded-full bg-border" />
-                              </div>
-
-                              <div className="px-5 pb-5">
+                              <div className="flex-1 flex flex-col px-6 py-5 overflow-y-auto">
                                    {/* Header */}
-                                   <div className="flex items-center justify-between mb-4">
-                                        <h3 className="font-serif text-base text-text-primary italic">Filters</h3>
-                                        <button onClick={onClose} className="p-1 rounded-lg hover:bg-surface-2 text-text-muted transition-colors">
-                                             <X className="w-4 h-4" />
+                                   <div className="flex items-center justify-between mb-6 pb-3 border-b border-border/30 flex-shrink-0">
+                                        <h3 className="font-serif text-xl text-text-primary">Filters</h3>
+                                        <button onClick={onClose} className="p-2 rounded-xl hover:bg-surface-2/50 text-text-muted hover:text-text-primary transition-all">
+                                             <X className="w-5 h-5" />
                                         </button>
                                    </div>
 
-                                   {/* Category — Compact horizontal scroll */}
-                                   <div className="mb-4">
-                                        <p className="text-[10px] font-semibold text-text-light uppercase tracking-wider mb-2">Category</p>
-                                        <div className="flex gap-1.5 overflow-x-auto scrollbar-hide pb-0.5">
+                                   {/* Category */}
+                                   <div className="mb-5 flex-shrink-0">
+                                        <p className="text-xs font-semibold text-text-light uppercase tracking-wider mb-3">Category</p>
+                                        <div className="grid grid-cols-2 gap-2">
                                              {categoryOptions.map((cat) => {
                                                   const isActive = activeCategory === cat.id;
                                                   return (
                                                        <button
                                                             key={cat.id}
                                                             onClick={() => onCategoryChange(cat.id)}
-                                                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[12px] whitespace-nowrap transition-all shrink-0 ${isActive
+                                                            className={`flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm transition-all ${
+                                                                 isActive
                                                                       ? "bg-text-primary text-white"
-                                                                      : "bg-surface-2 text-text-muted border border-border hover:border-border-hover"
-                                                                 }`}
+                                                                      : "bg-surface hover:bg-surface-2 text-text-muted border border-border/50"
+                                                            }`}
                                                        >
-                                                            {cat.icon && <cat.icon className="w-3 h-3" />}
-                                                            {cat.label}
+                                                            {cat.icon && <cat.icon className="w-4 h-4" />}
+                                                            <span className="font-medium">{cat.label}</span>
                                                        </button>
                                                   );
                                              })}
                                         </div>
                                    </div>
 
-                                   {/* Sort — Compact row */}
-                                   <div className="mb-4">
-                                        <p className="text-[10px] font-semibold text-text-light uppercase tracking-wider mb-2">Sort</p>
-                                        <div className="flex gap-1.5">
+                                   {/* Sort */}
+                                   <div className="mb-5 flex-shrink-0">
+                                        <p className="text-xs font-semibold text-text-light uppercase tracking-wider mb-3">Sort By</p>
+                                        <div className="grid grid-cols-2 gap-2">
                                              {sortOptions.map((opt) => (
                                                   <button
                                                        key={opt.value}
                                                        onClick={() => onSortChange(opt.value)}
-                                                       className={`flex-1 py-2 rounded-xl text-[12px] text-center transition-all ${sort === opt.value
-                                                                 ? "bg-text-primary text-white font-medium"
-                                                                 : "bg-surface-2 text-text-muted border border-border"
-                                                            }`}
+                                                       className={`py-2.5 px-3 rounded-xl text-sm font-medium transition-all ${
+                                                            sort === opt.value
+                                                                 ? "bg-text-primary text-white"
+                                                                 : "bg-surface hover:bg-surface-2 text-text-muted border border-border/50"
+                                                       }`}
                                                   >
                                                        {opt.label}
                                                   </button>
@@ -117,22 +114,23 @@ export function FiltersPanel({ isOpen, onClose, sort, onSortChange, activeCatego
                                         </div>
                                    </div>
 
-                                   {/* Condition — Compact */}
-                                   <div className="mb-4">
-                                        <p className="text-[10px] font-semibold text-text-light uppercase tracking-wider mb-2">Condition</p>
-                                        <div className="flex gap-1.5">
+                                   {/* Condition */}
+                                   <div className="mb-5 flex-shrink-0">
+                                        <p className="text-xs font-semibold text-text-light uppercase tracking-wider mb-3">Condition</p>
+                                        <div className="flex gap-2">
                                              {conditionOptions.map((c) => {
                                                   const selected = selectedConditions.includes(c);
                                                   return (
                                                        <button
                                                             key={c}
                                                             onClick={() => toggleCondition(c)}
-                                                            className={`flex items-center gap-1 flex-1 justify-center py-2 rounded-xl text-[12px] transition-all ${selected
-                                                                      ? "bg-text-primary text-white font-medium"
-                                                                      : "bg-surface-2 text-text-muted border border-border"
-                                                                 }`}
+                                                            className={`flex items-center gap-1.5 flex-1 justify-center py-2.5 rounded-xl text-sm font-medium transition-all ${
+                                                                 selected
+                                                                      ? "bg-text-primary text-white"
+                                                                      : "bg-surface hover:bg-surface-2 text-text-muted border border-border/50"
+                                                            }`}
                                                        >
-                                                            {selected && <Check className="w-3 h-3" />}
+                                                            {selected && <Check className="w-4 h-4" />}
                                                             {c}
                                                        </button>
                                                   );
@@ -140,46 +138,46 @@ export function FiltersPanel({ isOpen, onClose, sort, onSortChange, activeCatego
                                         </div>
                                    </div>
 
-                                   {/* Price — Compact inline */}
-                                   <div className="mb-5">
-                                        <p className="text-[10px] font-semibold text-text-light uppercase tracking-wider mb-2">Price (ALGO)</p>
+                                   {/* Price */}
+                                   <div className="mb-5 flex-shrink-0">
+                                        <p className="text-xs font-semibold text-text-light uppercase tracking-wider mb-3">Price Range (ALGO)</p>
                                         <div className="flex items-center gap-2">
                                              <input
                                                   type="number"
                                                   value={priceRange[0]}
-                                                  onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                                                  placeholder="Min"
-                                                  className="flex-1 px-3 py-2 rounded-xl bg-surface border border-border text-[12px] text-text-primary font-mono placeholder:text-text-light focus:outline-none focus:border-border-hover transition-all"
+                                                  onChange={(e) => setPriceRange([e.target.value, priceRange[1]])}
+                                                  placeholder="0"
+                                                  className="w-0 flex-1 px-3 py-3 rounded-xl bg-surface border border-border/50 text-sm text-text-primary font-mono placeholder:text-text-light focus:outline-none focus:border-text-primary/50 focus:ring-2 focus:ring-text-primary/10 transition-all"
                                              />
-                                             <span className="text-text-light text-xs">—</span>
+                                             <span className="text-text-light font-medium">—</span>
                                              <input
                                                   type="number"
                                                   value={priceRange[1]}
-                                                  onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                                                  placeholder="Max"
-                                                  className="flex-1 px-3 py-2 rounded-xl bg-surface border border-border text-[12px] text-text-primary font-mono placeholder:text-text-light focus:outline-none focus:border-border-hover transition-all"
+                                                  onChange={(e) => setPriceRange([priceRange[0], e.target.value])}
+                                                  placeholder="0"
+                                                  className="w-0 flex-1 px-3 py-3 rounded-xl bg-surface border border-border/50 text-sm text-text-primary font-mono placeholder:text-text-light focus:outline-none focus:border-text-primary/50 focus:ring-2 focus:ring-text-primary/10 transition-all"
                                              />
                                         </div>
                                    </div>
 
                                    {/* Actions */}
-                                   <div className="flex gap-2">
+                                   <div className="flex gap-3 mt-auto pt-5 border-t border-border/30 flex-shrink-0">
                                         <button
                                              onClick={() => {
                                                   setSelectedConditions([]);
-                                                  setPriceRange([0, 1000]);
+                                                  setPriceRange(["", ""]);
                                                   onSortChange("latest");
                                                   onCategoryChange("all");
                                              }}
-                                             className="flex-1 py-2.5 rounded-full border border-border text-[12px] text-text-muted hover:text-text-primary transition-all"
+                                             className="flex-1 py-3 rounded-xl border border-border/50 text-sm font-medium text-text-muted hover:text-text-primary hover:border-border transition-all"
                                         >
-                                             Reset
+                                             Reset All
                                         </button>
                                         <button
                                              onClick={onClose}
-                                             className="flex-1 py-2.5 rounded-full bg-text-primary hover:bg-primary-hover text-white text-[12px] font-medium transition-all active:scale-[0.97]"
+                                             className="flex-1 py-3 rounded-xl bg-text-primary hover:bg-text-primary/90 text-white text-sm font-semibold transition-all active:scale-[0.98]"
                                         >
-                                             Apply
+                                             Apply Filters
                                         </button>
                                    </div>
                               </div>

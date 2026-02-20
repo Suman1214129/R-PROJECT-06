@@ -50,36 +50,38 @@ export default function ListingDetailPage({ params }: { params: Promise<{ id: st
                          <ImageGallery images={listing.images} title={listing.title} />
                     </div>
 
-                    <div className="lg:col-span-2 space-y-6">
-                         <div>
-                              <span className={`inline-block px-2.5 py-0.5 rounded-lg text-xs font-medium border ${conditionColors[listing.condition]} mb-3`}>
-                                   {listing.condition}
-                              </span>
-                              <h1 className="font-serif text-2xl sm:text-3xl text-text-primary italic">{listing.title}</h1>
-                         </div>
-
-                         <CheckoutBox listingId={listing.id} price={listing.price} />
-
-                         <div>
-                              <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">Description</h3>
-                              <p className="text-sm text-text-muted leading-relaxed">{listing.description}</p>
-                         </div>
-
-                         <SellerCard seller={seller} />
-
-                         <div className="flex flex-wrap gap-2">
-                              {listing.tags.map((tag) => (
-                                   <span key={tag} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-2 border border-border text-xs text-text-muted">
-                                        <Tag className="w-3 h-3" />
-                                        {tag}
+                    <div className="lg:col-span-2">
+                         <div className="space-y-6">
+                              <div>
+                                   <span className={`inline-block px-2.5 py-0.5 rounded-lg text-xs font-medium border ${conditionColors[listing.condition]} mb-3`}>
+                                        {listing.condition}
                                    </span>
-                              ))}
-                         </div>
+                                   <h1 className="font-serif text-2xl sm:text-3xl text-text-primary italic">{listing.title}</h1>
+                              </div>
 
-                         <button className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors">
-                              <Share2 className="w-4 h-4" />
-                              Share this listing
-                         </button>
+                              <CheckoutBox listingId={listing.id} price={listing.price} />
+
+                              <div>
+                                   <h3 className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-2">Description</h3>
+                                   <p className="text-sm text-text-muted leading-relaxed">{listing.description}</p>
+                              </div>
+
+                              <SellerCard seller={seller} />
+
+                              <div className="flex flex-wrap gap-2">
+                                   {listing.tags.map((tag) => (
+                                        <span key={tag} className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-surface-2 border border-border text-xs text-text-muted">
+                                             <Tag className="w-3 h-3" />
+                                             {tag}
+                                        </span>
+                                   ))}
+                              </div>
+
+                              <button className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors">
+                                   <Share2 className="w-4 h-4" />
+                                   Share this listing
+                              </button>
+                         </div>
                     </div>
                </div>
 

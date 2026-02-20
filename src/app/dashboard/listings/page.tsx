@@ -1,26 +1,98 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plus, Package, TrendingUp, ShoppingCart, Eye, Pause, Trash2, Check, LayoutGrid, List } from "lucide-react";
 import Link from "next/link";
-import { listings } from "@/lib/mock-data";
 import { CryptoAmount } from "@/components/ui/CryptoAmount";
 import { OrderStatusBadge } from "@/components/ui/OrderStatusBadge";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { timeAgo } from "@/lib/utils";
-
-const myListings = listings.filter((l) => l.sellerId === "seller-1");
-
-const stats = [
-     { label: "Active Listings", value: "5", trend: "+2 this week", icon: Package, color: "text-accent" },
-     { label: "Total Sales", value: "1,247", trend: "+12% this month", icon: TrendingUp, color: "text-emerald-600", isCrypto: true },
-     { label: "Pending Orders", value: "3", trend: "2 ready for pickup", icon: ShoppingCart, color: "text-amber-600" },
-     { label: "Profile Views", value: "891", trend: "+28% this week", icon: Eye, color: "text-blue-500" },
-];
+import { useAuthStore } from "@/store/auth";
+import type { ListingData } from "@/backend/firestore";
 
 export default function DashboardListingsPage() {
+     const { user } = useAuthStore();
      const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+     const [myListings, setMyListings] = useState<ListingData[]>([]);
+     const [loading, setLoading] = useState(true);
+     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+     const [listingToDelete, setListingToDelete] = useState<string | null>(null);
+
+     useEffect(() => {
+          const fetchListings = async () => {
+               if (!user) {
+                    setLoading(false);
+                    return;
+               }
+
+               try {
+                    const response = await fetch(`/api/listings?uid=${user.uid}`);
+                    if (response.ok) {
+                         const data = await response.json();
+                         setMyListings(data.listings);
+                    }
+               } catch (error) {
+                    console.error("Error fetching listings:", error);
+               } finally {
+                    setLoading(false);
+               }
+          };
+
+          fetchListings();
+     }, [user]);
+
+     const activeListings = myListings.filter((l) => l.status === "Active").length;
+     const totalViews = myListings.reduce((sum, l) => sum + l.views, 0);
+
+     const handleStatusChange = async (listingId: string, status: "Active" | "Paused" | "Sold") => {
+          try {
+               const response = await fetch(`/api/listings/${listingId}`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ status }),
+               });
+
+               if (response.ok) {
+                    setMyListings((prev) =>
+                         prev.map((l) => (l.id === listingId ? { ...l, status } : l))
+                    );
+               }
+          } catch (error) {
+               console.error("Error updating listing:", error);
+          }
+     };
+
+     const handleDelete = async (listingId: string) => {
+          setListingToDelete(listingId);
+          setDeleteDialogOpen(true);
+     };
+
+     const confirmDelete = async () => {
+          if (!listingToDelete) return;
+
+          try {
+               const response = await fetch(`/api/listings/${listingToDelete}`, {
+                    method: "DELETE",
+               });
+
+               if (response.ok) {
+                    setMyListings((prev) => prev.filter((l) => l.id !== listingToDelete));
+               }
+          } catch (error) {
+               console.error("Error deleting listing:", error);
+          } finally {
+               setListingToDelete(null);
+          }
+     };
+
+const stats = [
+     { label: "Active Listings", value: activeListings.toString(), trend: "+2 this week", icon: Package, color: "text-accent" },
+     { label: "Total Sales", value: "1,247", trend: "+12% this month", icon: TrendingUp, color: "text-emerald-600", isCrypto: true },
+     { label: "Pending Orders", value: "3", trend: "2 ready for pickup", icon: ShoppingCart, color: "text-amber-600" },
+     { label: "Profile Views", value: totalViews.toString(), trend: "+28% this week", icon: Eye, color: "text-blue-500" },
+];
 
      return (
           <div className="flex">
@@ -65,7 +137,20 @@ export default function DashboardListingsPage() {
                          </div>
                     </div>
 
-                    {viewMode === "list" ? (
+                    {loading ? (
+                         <div className="rounded-2xl border border-border bg-white p-8 text-center">
+                              <p className="text-text-muted">Loading your listings...</p>
+                         </div>
+                    ) : myListings.length === 0 ? (
+                         <div className="rounded-2xl border border-border bg-white p-8 text-center">
+                              <Package className="w-12 h-12 text-text-light mx-auto mb-3" />
+                              <p className="text-text-muted mb-4">You haven't created any listings yet</p>
+                              <Link href="/dashboard/listings/new" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary hover:bg-primary-hover text-white text-sm font-medium">
+                                   <Plus className="w-4 h-4" />
+                                   Create Your First Listing
+                              </Link>
+                         </div>
+                    ) : viewMode === "list" ? (
                          <div className="rounded-2xl border border-border bg-white overflow-hidden">
                               <div className="overflow-x-auto">
                                    <table className="w-full">
@@ -93,9 +178,27 @@ export default function DashboardListingsPage() {
                                                        <td className="px-5 py-4 hidden lg:table-cell"><span className="text-sm text-text-muted">{listing.views}</span></td>
                                                        <td className="px-5 py-4 text-right">
                                                             <div className="flex items-center justify-end gap-1">
-                                                                 <button className="p-1.5 rounded-lg hover:bg-surface-2 text-text-light hover:text-amber-600 transition-all" title="Pause"><Pause className="w-3.5 h-3.5" /></button>
-                                                                 <button className="p-1.5 rounded-lg hover:bg-surface-2 text-text-light hover:text-emerald-600 transition-all" title="Mark Sold"><Check className="w-3.5 h-3.5" /></button>
-                                                                 <button className="p-1.5 rounded-lg hover:bg-surface-2 text-text-light hover:text-red-500 transition-all" title="Delete"><Trash2 className="w-3.5 h-3.5" /></button>
+                                                                 <button 
+                                                                      onClick={() => handleStatusChange(listing.id, listing.status === "Paused" ? "Active" : "Paused")}
+                                                                      className="p-1.5 rounded-lg hover:bg-surface-2 text-text-light hover:text-amber-600 transition-all" 
+                                                                      title={listing.status === "Paused" ? "Activate" : "Pause"}
+                                                                 >
+                                                                      <Pause className="w-3.5 h-3.5" />
+                                                                 </button>
+                                                                 <button 
+                                                                      onClick={() => handleStatusChange(listing.id, "Sold")}
+                                                                      className="p-1.5 rounded-lg hover:bg-surface-2 text-text-light hover:text-emerald-600 transition-all" 
+                                                                      title="Mark Sold"
+                                                                 >
+                                                                      <Check className="w-3.5 h-3.5" />
+                                                                 </button>
+                                                                 <button 
+                                                                      onClick={() => handleDelete(listing.id)}
+                                                                      className="p-1.5 rounded-lg hover:bg-surface-2 text-text-light hover:text-red-500 transition-all" 
+                                                                      title="Delete"
+                                                                 >
+                                                                      <Trash2 className="w-3.5 h-3.5" />
+                                                                 </button>
                                                             </div>
                                                        </td>
                                                   </tr>
@@ -125,6 +228,16 @@ export default function DashboardListingsPage() {
                               ))}
                          </div>
                     )}
+
+                    <ConfirmDialog
+                         isOpen={deleteDialogOpen}
+                         onClose={() => setDeleteDialogOpen(false)}
+                         onConfirm={confirmDelete}
+                         title="Delete Listing?"
+                         message="This action cannot be undone. Your listing will be permanently removed from the marketplace."
+                         confirmText="Delete"
+                         cancelText="Cancel"
+                    />
                </div>
           </div>
      );
