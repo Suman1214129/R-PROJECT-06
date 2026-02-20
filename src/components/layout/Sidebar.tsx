@@ -10,12 +10,28 @@ const navItems = [
      { href: "/dashboard/listings/new", label: "New Listing", icon: Plus },
 ];
 
+import { NotificationList } from "@/components/notifications/NotificationList";
+
 export function Sidebar() {
      const pathname = usePathname();
      const [collapsed, setCollapsed] = useState(false);
 
      return (
           <aside className={`hidden lg:flex flex-col border-r border-border bg-white h-[calc(100vh-56px)] sticky top-14 transition-all ${collapsed ? "w-16" : "w-56"}`}>
+               <div className="p-4 border-b border-border flex items-center justify-between">
+                    <Link href="/" className="flex items-center gap-2">
+                         <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-white font-serif font-bold text-xl">
+                              C
+                         </div>
+                         <span className="font-serif text-lg font-bold text-text-primary hidden md:block">
+                              CampusSwap
+                         </span>
+                    </Link>
+                    <div className="md:hidden">
+                         <NotificationList />
+                    </div>
+               </div>
+
                <div className="flex-1 py-4 space-y-1 px-2">
                     {navItems.map((item) => {
                          const isActive = pathname === item.href;
@@ -24,8 +40,8 @@ export function Sidebar() {
                                    key={item.href}
                                    href={item.href}
                                    className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${isActive
-                                             ? "text-primary bg-primary-light"
-                                             : "text-text-muted hover:text-text-primary hover:bg-surface-2"
+                                        ? "text-primary bg-primary-light"
+                                        : "text-text-muted hover:text-text-primary hover:bg-surface-2"
                                         }`}
                               >
                                    <item.icon className="w-4 h-4 shrink-0" />

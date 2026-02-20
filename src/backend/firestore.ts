@@ -233,6 +233,27 @@ export interface ListingData {
      createdAt: Timestamp | string;
 }
 
+// ── Escrow Orders ──────────────────────────────────────────────────────
+
+export interface EscrowOrder {
+     id: string;
+     listingId: string;
+     listingTitle: string;
+     listingImage: string;
+     buyerUid: string;
+     buyerAddress: string;
+     sellerAddress: string;
+     amount: number; // ALGO
+     escrowAddress: string;
+     escrowProgram: string; // base64 compiled TEAL
+     deliveryCode: string; // 9-digit string
+     paymentTxId: string;
+     releaseTxId?: string;
+     refundTxId?: string;
+     status: "pending" | "paid" | "completed" | "cancelled";
+     createdAt: Timestamp | string;
+}
+
 /**
  * Create a new listing in Firestore.
  */
@@ -311,3 +332,72 @@ export async function deleteListing(listingId: string) {
      await deleteDoc(ref);
 }
 
+/**
+ * Create an escrow order in Firestore.
+ * Returns the generated order document ID.
+ */
+export async function createOrder(data: Omit<EscrowOrder, "id" | "paymentTxId" | "status" | "createdAt">): Promise<string> {
+     const colRef = collection(db, "orders");
+     const ref = doc(colRef);
+     await setDoc(ref, {
+          ...data,
+          paymentTxId: "",
+          status: "pending",
+          createdAt: serverTimestamp(),
+     });
+     return ref.id;
+}
+
+/** Get a single order by ID. */
+export async function getOrder(orderId: string): Promise<EscrowOrder | null> {
+     const ref = doc(db, "orders", orderId);
+     const snap = await getDoc(ref);
+     if (!snap.exists()) return null;
+     return { id: snap.id, ...snap.data() } as EscrowOrder;
+}
+
+/** Update order with the payment transaction ID (called after buyer signs with Pera Wallet). */
+export async function updateOrderPaymentTx(orderId: string, paymentTxId: string): Promise<void> {
+     const ref = doc(db, "orders", orderId);
+     await updateDoc(ref, { paymentTxId, status: "paid" });
+}
+
+/** Mark order as completed with the escrow release tx ID. */
+export async function setOrderCompleted(orderId: string, releaseTxId: string): Promise<void> {
+     const ref = doc(db, "orders", orderId);
+     await updateDoc(ref, { releaseTxId, status: "completed" });
+}
+
+/** Cancel an order and record the refund tx ID. */
+export async function cancelOrder(orderId: string, refundTxId: string): Promise<void> {
+     const ref = doc(db, "orders", orderId);
+     await updateDoc(ref, { refundTxId, status: "cancelled" });
+}
+
+/** Get all orders where user is the buyer. */
+export async function getBuyerOrders(buyerUid: string): Promise<EscrowOrder[]> {
+     const colRef = collection(db, "orders");
+     const snap = await getDocs(colRef);
+     return snap.docs
+          .map((d) => ({ id: d.id, ...d.data() } as EscrowOrder))
+          .filter((o) => o.buyerUid === buyerUid)
+          .sort((a, b) => {
+               const aT = typeof a.createdAt === "string" ? new Date(a.createdAt).getTime() : (a.createdAt as Timestamp).toMillis();
+               const bT = typeof b.createdAt === "string" ? new Date(b.createdAt).getTime() : (b.createdAt as Timestamp).toMillis();
+               return bT - aT;
+          });
+}
+
+/** Get all orders where seller's Algorand address matches. */
+export async function getSellerOrders(sellerAddress: string): Promise<EscrowOrder[]> {
+     const colRef = collection(db, "orders");
+     const snap = await getDocs(colRef);
+     return snap.docs
+          .map((d) => ({ id: d.id, ...d.data() } as EscrowOrder))
+          .filter((o) => o.sellerAddress === sellerAddress)
+          .sort((a, b) => {
+               const aT = typeof a.createdAt === "string" ? new Date(a.createdAt).getTime() : (a.createdAt as Timestamp).toMillis();
+               const bT = typeof b.createdAt === "string" ? new Date(b.createdAt).getTime() : (b.createdAt as Timestamp).toMillis();
+               return bT - aT;
+          });
+}

@@ -13,6 +13,7 @@ export interface Seller {
      activeListings: number;
      responseRate: number;
      bio: string;
+     walletAddress: string;
 }
 
 export interface Listing {
@@ -95,6 +96,7 @@ export const sellers: Seller[] = [
           activeListings: 5,
           responseRate: 98,
           bio: "CS major at MIT. Selling textbooks and electronics I no longer need. Fast shipping, great condition guaranteed!",
+          walletAddress: "FQMNJVS7F2RCUMVPPQ52PC2JTJVNHBW6BCSWAPVYUBIJ7Y72IS3LTFROLI",
      },
      {
           id: "seller-2",
@@ -110,6 +112,7 @@ export const sellers: Seller[] = [
           activeListings: 3,
           responseRate: 95,
           bio: "Engineering student. Minimalist lifestyle — selling quality items at fair prices.",
+          walletAddress: "OHGCIZAWUDH7H724Q35W4ZMDGVE6YBMKASGQTQ3CLOQSHETRTRPPSBJMWY",
      },
      {
           id: "seller-3",
@@ -125,6 +128,7 @@ export const sellers: Seller[] = [
           activeListings: 8,
           responseRate: 99,
           bio: "Serial seller on campus. If I have it, it's in great shape. Check out my listings!",
+          walletAddress: "LJ3JRAUTE6CY2N6TI7GWLBTZA6RNQO263MSD6M7ES7YADEY2B3AZNTLTFM",
      },
      {
           id: "seller-4",
@@ -140,6 +144,7 @@ export const sellers: Seller[] = [
           activeListings: 4,
           responseRate: 90,
           bio: "Art student clearing out my dorm. Furniture, supplies, and more!",
+          walletAddress: "MHZK5JRDZVYUURVRUDISLIBFWYUDN3XF36ZONK3UVXS622YVZ4T6DWCH2A",
      },
      {
           id: "seller-5",
@@ -155,6 +160,7 @@ export const sellers: Seller[] = [
           activeListings: 2,
           responseRate: 100,
           bio: "Pre-med student. Selling textbooks and study equipment. Everything is in excellent condition.",
+          walletAddress: "623N3PAQJFPXHEI7X43XTIU4G5BJNYJMU2MCKQ47LSHT2PZWZS6KEIEWZA",
      },
 ];
 
@@ -176,7 +182,7 @@ export const listings: Listing[] = [
           id: "listing-1",
           title: "Calculus: Early Transcendentals 8th Edition",
           description: "Barely used calculus textbook. Some highlighting in chapters 1–4, otherwise pristine condition. Perfect for MATH 101/102. Includes the student solutions manual.",
-          price: 45,
+          price: 0.001,
           category: "books",
           condition: "Like New",
           images: [
@@ -194,7 +200,7 @@ export const listings: Listing[] = [
           id: "listing-2",
           title: "MacBook Air M2 2023 — 16GB / 512GB",
           description: "Selling my MacBook Air M2. Midnight color, 16GB RAM, 512GB SSD. Battery cycle count: 47. Comes with original charger and box. AppleCare+ until Dec 2025.",
-          price: 850,
+          price: 0.001,
           category: "electronics",
           condition: "Like New",
           images: [
@@ -211,7 +217,7 @@ export const listings: Listing[] = [
           id: "listing-3",
           title: "IKEA MARKUS Office Chair — Black",
           description: "Great ergonomic desk chair. Used for one semester. Adjustable height, tilt lock, lumbar support. Minor scratches on the base, otherwise perfect.",
-          price: 75,
+          price: 0.001,
           category: "furniture",
           condition: "Good",
           images: [
@@ -228,7 +234,7 @@ export const listings: Listing[] = [
           id: "listing-4",
           title: "Sony WH-1000XM5 Headphones",
           description: "Industry-leading noise cancellation. Silver color. Includes carrying case, cable, and airplane adapter. Battery still lasts 28+ hours.",
-          price: 200,
+          price: 0.001,
           category: "electronics",
           condition: "Like New",
           images: [
@@ -245,7 +251,7 @@ export const listings: Listing[] = [
           id: "listing-5",
           title: "Vintage Levi's 501 Jeans — Size 32",
           description: "Authentic vintage Levi's 501 jeans in great condition. Slightly faded for that classic look. True to size.",
-          price: 35,
+          price: 0.001,
           category: "clothing",
           condition: "Good",
           images: [
@@ -262,7 +268,7 @@ export const listings: Listing[] = [
           id: "listing-6",
           title: "Nintendo Switch OLED + 4 Games",
           description: "White model Nintendo Switch OLED. Includes Zelda TOTK, Mario Kart 8, Smash Bros, and Animal Crossing. Screen protector applied since day one.",
-          price: 320,
+          price: 0.001,
           category: "gaming",
           condition: "Like New",
           images: [
@@ -276,20 +282,37 @@ export const listings: Listing[] = [
           createdAt: "2025-02-07T13:30:00Z",
      },
      {
+          id: "listing-7",
+          title: "Electric Scooter — Xiaomi Mi Pro 2",
+          description: "Max speed 25km/h, 45km range. Foldable, very portable. Used for one semester of commuting. New tires installed last month.",
+          price: 250,
+          category: "transport",
+          condition: "Good",
+          images: [
+               "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=600&fit=crop",
+               "https://images.unsplash.com/photo-1604868189414-2f8fc6c5e09a?w=600&h=600&fit=crop",
+          ],
+          sellerId: "seller-5",
+          tags: ["scooter", "electric", "transport"],
+          views: 312,
+          status: "Active",
+          createdAt: "2025-02-13T08:15:00Z",
+     },
+     {
           id: "listing-8",
           title: "Organic Chemistry 9th Edition — McMurry",
           description: "Required text for CHEM 201. No writing or highlighting. Comes with the model kit (unused).",
-          price: 55,
+          price: 45,
           category: "books",
           condition: "Like New",
           images: [
                "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=600&h=600&fit=crop",
           ],
-          sellerId: "seller-5",
-          tags: ["textbook", "chemistry", "organic"],
-          views: 167,
+          sellerId: "seller-2",
+          tags: ["textbook", "chemistry", "organic", "school"],
+          views: 89,
           status: "Active",
-          createdAt: "2025-02-13T08:15:00Z",
+          createdAt: "2025-02-14T09:30:00Z",
      },
      {
           id: "listing-9",
@@ -311,7 +334,7 @@ export const listings: Listing[] = [
           id: "listing-10",
           title: "iPad Air 5th Gen — Wi-Fi 256GB",
           description: "Space Gray iPad Air with Apple Pencil 2nd gen included. Used for note-taking only. No scratches, always had a case on it.",
-          price: 420,
+          price: 450,
           category: "electronics",
           condition: "Like New",
           images: [
@@ -344,7 +367,7 @@ export const listings: Listing[] = [
           id: "listing-12",
           title: "North Face Puffer Jacket — Medium",
           description: "Black 700-fill North Face Nuptse jacket. Size M, fits true. Worn for one winter season. Machine washed and ready to go.",
-          price: 120,
+          price: 180,
           category: "clothing",
           condition: "Good",
           images: [
@@ -360,11 +383,12 @@ export const listings: Listing[] = [
           id: "listing-13",
           title: "Fender Stratocaster Player Series",
           description: "Sunburst Fender Strat in excellent condition. Comes with gig bag, strap, and extra set of strings. Maple neck, SSS pickups.",
-          price: 500,
+          price: 550,
           category: "electronics",
           condition: "Like New",
           images: [
                "https://images.unsplash.com/photo-1550985616-10810253b84d?w=600&h=600&fit=crop",
+               "https://images.unsplash.com/photo-1516924962500-2b4b3b99ea02?w=600&h=600&fit=crop",
           ],
           sellerId: "seller-2",
           tags: ["guitar", "fender", "music"],
@@ -376,7 +400,7 @@ export const listings: Listing[] = [
           id: "listing-14",
           title: "Canon EOS R50 Mirrorless Camera",
           description: "Includes 18-45mm kit lens, 128GB SD card, camera bag, and extra battery. Perfect for photography classes. Shutter count: ~2,000.",
-          price: 550,
+          price: 600,
           category: "electronics",
           condition: "Like New",
           images: [
@@ -392,7 +416,7 @@ export const listings: Listing[] = [
           id: "listing-15",
           title: "Standing Desk — Electric Adjustable",
           description: "48x24 inch electric standing desk. White top, black frame. Memory presets for sitting and standing heights. Minor scratch on edge.",
-          price: 180,
+          price: 200,
           category: "furniture",
           condition: "Good",
           images: [
@@ -408,7 +432,7 @@ export const listings: Listing[] = [
           id: "listing-16",
           title: "TI-84 Plus CE Graphing Calculator",
           description: "Required for many math/science courses. Color screen, rechargeable. All functions work perfectly. Includes USB cable.",
-          price: 60,
+          price: 110,
           category: "supplies",
           condition: "Good",
           images: [
@@ -424,7 +448,7 @@ export const listings: Listing[] = [
           id: "listing-17",
           title: "Road Bike — Giant Contend 3",
           description: "Size M road bike, great for campus commuting. Shimano Claris groupset, 700c wheels. Recently tuned up. Includes lock and lights.",
-          price: 350,
+          price: 0.001,
           category: "transport",
           condition: "Good",
           images: [
@@ -440,7 +464,7 @@ export const listings: Listing[] = [
           id: "listing-18",
           title: "Introduction to Algorithms (CLRS) 4th Ed",
           description: "The classic algorithms textbook. Hardcover, no markings. Essential for any CS major.",
-          price: 70,
+          price: 0.001,
           category: "books",
           condition: "Like New",
           images: [
@@ -456,7 +480,7 @@ export const listings: Listing[] = [
           id: "listing-19",
           title: "AirPods Pro 2nd Generation",
           description: "USB-C case. Active noise cancellation still works perfectly. Ear tips (all sizes) included. Battery health: 92%.",
-          price: 150,
+          price: 0.001,
           category: "electronics",
           condition: "Good",
           images: [
@@ -472,7 +496,7 @@ export const listings: Listing[] = [
           id: "listing-20",
           title: "Mini Fridge — Midea 3.3 cu ft",
           description: "Perfect dorm fridge. Black finish, includes small freezer compartment. Very quiet operation. Moving out and can't take it.",
-          price: 65,
+          price: 0.001,
           category: "furniture",
           condition: "Good",
           images: [
@@ -488,7 +512,7 @@ export const listings: Listing[] = [
           id: "listing-21",
           title: "Logitech MX Master 3S Mouse",
           description: "Graphite color. Ergonomic wireless mouse with USB-C charging. MagSpeed scroll wheel. Pairs with up to 3 devices.",
-          price: 55,
+          price: 0.001,
           category: "electronics",
           condition: "Like New",
           images: [
@@ -504,7 +528,7 @@ export const listings: Listing[] = [
           id: "listing-22",
           title: "Skateboard — Element Complete",
           description: "8.0 inch complete setup. Barely ridden — bought it thinking I'd learn but never did. Great for beginners.",
-          price: 50,
+          price: 0.001,
           category: "transport",
           condition: "Like New",
           images: [
@@ -525,7 +549,7 @@ export const orders: Order[] = [
           listingId: "listing-2",
           buyerId: "buyer-1",
           sellerId: "seller-3",
-          price: 850,
+          price: 0.001,
           status: "completed",
           createdAt: "2025-02-01T09:00:00Z",
           txHash: "0xa1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456",
@@ -544,7 +568,7 @@ export const orders: Order[] = [
           listingId: "listing-4",
           buyerId: "buyer-1",
           sellerId: "seller-2",
-          price: 200,
+          price: 0.001,
           status: "ready",
           createdAt: "2025-02-14T10:00:00Z",
           txHash: "0xb2c3d4e5f6a789012345678901234567890abcdef1234567890abcdef234567",
@@ -563,7 +587,7 @@ export const orders: Order[] = [
           listingId: "listing-6",
           buyerId: "buyer-2",
           sellerId: "seller-1",
-          price: 320,
+          price: 0.001,
           status: "preparing",
           createdAt: "2025-02-15T14:30:00Z",
           txHash: "0xc3d4e5f6a7b89012345678901234567890abcdef1234567890abcdef345678",
@@ -582,7 +606,7 @@ export const orders: Order[] = [
           listingId: "listing-1",
           buyerId: "buyer-3",
           sellerId: "seller-1",
-          price: 45,
+          price: 0.001,
           status: "confirmed",
           createdAt: "2025-02-17T11:00:00Z",
           txHash: "0xd4e5f6a7b8c9012345678901234567890abcdef1234567890abcdef456789",
@@ -601,7 +625,7 @@ export const orders: Order[] = [
           listingId: "listing-10",
           buyerId: "buyer-1",
           sellerId: "seller-1",
-          price: 420,
+          price: 0.001,
           status: "delivered",
           createdAt: "2025-02-10T08:00:00Z",
           txHash: "0xe5f6a7b8c9d0012345678901234567890abcdef1234567890abcdef567890",
@@ -620,7 +644,7 @@ export const orders: Order[] = [
           listingId: "listing-8",
           buyerId: "buyer-2",
           sellerId: "seller-5",
-          price: 55,
+          price: 0.001,
           status: "placed",
           createdAt: "2025-02-18T16:00:00Z",
           txHash: "0xf6a7b8c9d0e1012345678901234567890abcdef1234567890abcdef678901",
@@ -639,7 +663,7 @@ export const orders: Order[] = [
           listingId: "listing-15",
           buyerId: "buyer-3",
           sellerId: "seller-3",
-          price: 180,
+          price: 0.001,
           status: "completed",
           createdAt: "2025-01-25T10:00:00Z",
           txHash: "0xa7b8c9d0e1f2012345678901234567890abcdef1234567890abcdef789012",
@@ -658,7 +682,7 @@ export const orders: Order[] = [
           listingId: "listing-19",
           buyerId: "buyer-2",
           sellerId: "seller-1",
-          price: 150,
+          price: 0.001,
           status: "ready",
           createdAt: "2025-02-16T09:30:00Z",
           txHash: "0xb8c9d0e1f2a3012345678901234567890abcdef1234567890abcdef890123",

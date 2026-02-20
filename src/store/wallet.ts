@@ -7,10 +7,12 @@ interface WalletState {
      balance: number;
      walletType: string | null;
      showConnectModal: boolean;
+     showWalletQR: boolean;
      connectPera: () => Promise<void>;
      reconnectSession: () => Promise<void>;
      disconnectPera: () => Promise<void>;
      setShowConnectModal: (show: boolean) => void;
+     setShowWalletQR: (show: boolean) => void;
 }
 
 /**
@@ -36,6 +38,7 @@ export const useWalletStore = create<WalletState>((set) => ({
      balance: 0,
      walletType: null,
      showConnectModal: false,
+     showWalletQR: false,
 
      /**
       * Open Pera Wallet QR modal and connect.
@@ -135,5 +138,9 @@ export const useWalletStore = create<WalletState>((set) => ({
 
      setShowConnectModal: (show: boolean) => {
           set({ showConnectModal: show });
+     },
+
+     setShowWalletQR: (show: boolean) => {
+          set({ showWalletQR: show });
      },
 }));

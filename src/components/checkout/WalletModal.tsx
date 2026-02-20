@@ -1,12 +1,12 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Wallet, ChevronRight, HelpCircle, ExternalLink, Loader2 } from "lucide-react";
+import { X, Wallet, ChevronRight, HelpCircle, ExternalLink, Loader2, QrCode } from "lucide-react";
 import { useWalletStore } from "@/store/wallet";
 import { useState } from "react";
 
 export function ConnectWalletModal() {
-     const { showConnectModal, setShowConnectModal, connectPera, isConnecting } = useWalletStore();
+     const { showConnectModal, setShowConnectModal, connectPera, isConnecting, isConnected, setShowWalletQR } = useWalletStore();
      const [showHelp, setShowHelp] = useState(false);
 
      const handleConnectPera = async () => {
@@ -43,31 +43,54 @@ export function ConnectWalletModal() {
 
                                    {/* Pera Wallet Option */}
                                    <div className="p-5">
-                                        <button
-                                             onClick={handleConnectPera}
-                                             disabled={isConnecting}
-                                             className="w-full flex items-center justify-between p-4 rounded-xl border-2 border-accent/20 bg-accent/5 hover:border-accent/40 hover:bg-accent/10 transition-all group disabled:opacity-60 disabled:cursor-not-allowed"
-                                        >
-                                             <div className="flex items-center gap-3">
-                                                  {/* Pera logo SVG */}
-                                                  <div className="w-10 h-10 rounded-xl bg-[#FFEE55] flex items-center justify-center shrink-0 shadow-sm">
-                                                       <svg width="18" height="18" viewBox="0 0 40 40" fill="none">
-                                                            <rect width="40" height="40" rx="10" fill="#FFEE55" />
-                                                            <path d="M10 28L20 12L30 28" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
-                                                            <path d="M14 22H26" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
-                                                       </svg>
+                                        {isConnected ? (
+                                             /* Already connected — offer Wallet QR */
+                                             <button
+                                                  onClick={() => {
+                                                       setShowConnectModal(false);
+                                                       setShowWalletQR(true);
+                                                  }}
+                                                  className="w-full flex items-center justify-between p-4 rounded-xl border-2 border-primary/20 bg-primary/5 hover:border-primary/40 hover:bg-primary/10 transition-all group"
+                                             >
+                                                  <div className="flex items-center gap-3">
+                                                       <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                                                            <QrCode className="w-5 h-5 text-primary" />
+                                                       </div>
+                                                       <div className="text-left">
+                                                            <div className="text-sm font-semibold text-text-primary">View Wallet QR</div>
+                                                            <div className="text-xs text-text-muted">Show your Algorand address</div>
+                                                       </div>
                                                   </div>
-                                                  <div className="text-left">
-                                                       <div className="text-sm font-semibold text-text-primary">Pera Wallet</div>
-                                                       <div className="text-xs text-text-muted">Mobile & Web · Most popular</div>
+                                                  <ChevronRight className="w-4 h-4 text-text-light group-hover:text-primary transition-colors" />
+                                             </button>
+                                        ) : (
+                                             /* Not connected — connect via Pera */
+                                             <button
+                                                  onClick={handleConnectPera}
+                                                  disabled={isConnecting}
+                                                  className="w-full flex items-center justify-between p-4 rounded-xl border-2 border-accent/20 bg-accent/5 hover:border-accent/40 hover:bg-accent/10 transition-all group disabled:opacity-60 disabled:cursor-not-allowed"
+                                             >
+                                                  <div className="flex items-center gap-3">
+                                                       {/* Pera logo SVG */}
+                                                       <div className="w-10 h-10 rounded-xl bg-[#FFEE55] flex items-center justify-center shrink-0 shadow-sm">
+                                                            <svg width="18" height="18" viewBox="0 0 40 40" fill="none">
+                                                                 <rect width="40" height="40" rx="10" fill="#FFEE55" />
+                                                                 <path d="M10 28L20 12L30 28" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+                                                                 <path d="M14 22H26" stroke="#1A1A1A" strokeWidth="4" strokeLinecap="round" />
+                                                            </svg>
+                                                       </div>
+                                                       <div className="text-left">
+                                                            <div className="text-sm font-semibold text-text-primary">Pera Wallet</div>
+                                                            <div className="text-xs text-text-muted">Mobile &amp; Web · Most popular</div>
+                                                       </div>
                                                   </div>
-                                             </div>
-                                             {isConnecting ? (
-                                                  <Loader2 className="w-5 h-5 text-accent animate-spin" />
-                                             ) : (
-                                                  <ChevronRight className="w-4 h-4 text-text-light group-hover:text-accent transition-colors" />
-                                             )}
-                                        </button>
+                                                  {isConnecting ? (
+                                                       <Loader2 className="w-5 h-5 text-accent animate-spin" />
+                                                  ) : (
+                                                       <ChevronRight className="w-4 h-4 text-text-light group-hover:text-accent transition-colors" />
+                                                  )}
+                                             </button>
+                                        )}
 
                                         {isConnecting && (
                                              <p className="text-center text-xs text-text-muted mt-3 animate-pulse">

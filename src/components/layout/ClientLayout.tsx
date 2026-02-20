@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navbar } from "./Navbar";
 import { ConnectWalletModal } from "@/components/checkout/WalletModal";
+import { WalletQRModal } from "@/components/checkout/WalletQRModal";
 import { MessagesDialog } from "@/components/messages/MessagesDialog";
 import { useUIStore } from "@/store/ui";
 import { useAuthStore } from "@/store/auth";
@@ -107,6 +108,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
                     </motion.main>
                </AnimatePresence>
                <ConnectWalletModal />
+               <WalletQRModal />
                <MessagesDialog isOpen={messagesOpen} onClose={() => setMessagesOpen(false)} />
           </>
      );

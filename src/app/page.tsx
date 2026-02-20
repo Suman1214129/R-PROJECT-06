@@ -13,6 +13,7 @@ import { listings } from "@/lib/mock-data";
 import { ProductCard } from "@/components/marketplace/ProductCard";
 import { FiltersPanel } from "@/components/marketplace/FiltersPanel";
 import { SearchDialog } from "@/components/search/SearchDialog";
+import { HomeQRScanner } from "@/components/home/HomeQRScanner";
 
 const studentCategories = [
   {
@@ -28,12 +29,12 @@ const studentCategories = [
         xmlns="http://www.w3.org/2000/svg"
         className="w-14 h-14"
       >
-        <rect x="10" y="8" width="30" height="42" rx="3" fill="#E85D4A" opacity="0.2"/>
-        <rect x="16" y="8" width="30" height="42" rx="3" fill="#E85D4A" opacity="0.5"/>
-        <rect x="16" y="8" width="30" height="42" rx="3" stroke="#E85D4A" strokeWidth="2"/>
-        <line x1="22" y1="20" x2="40" y2="20" stroke="#E85D4A" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="22" y1="27" x2="40" y2="27" stroke="#E85D4A" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="22" y1="34" x2="34" y2="34" stroke="#E85D4A" strokeWidth="2" strokeLinecap="round"/>
+        <rect x="10" y="8" width="30" height="42" rx="3" fill="#E85D4A" opacity="0.2" />
+        <rect x="16" y="8" width="30" height="42" rx="3" fill="#E85D4A" opacity="0.5" />
+        <rect x="16" y="8" width="30" height="42" rx="3" stroke="#E85D4A" strokeWidth="2" />
+        <line x1="22" y1="20" x2="40" y2="20" stroke="#E85D4A" strokeWidth="2" strokeLinecap="round" />
+        <line x1="22" y1="27" x2="40" y2="27" stroke="#E85D4A" strokeWidth="2" strokeLinecap="round" />
+        <line x1="22" y1="34" x2="34" y2="34" stroke="#E85D4A" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -50,11 +51,11 @@ const studentCategories = [
         xmlns="http://www.w3.org/2000/svg"
         className="w-14 h-14"
       >
-        <rect x="10" y="16" width="44" height="28" rx="4" fill="#3B82F6" opacity="0.25"/>
-        <rect x="10" y="16" width="44" height="28" rx="4" stroke="#3B82F6" strokeWidth="2"/>
-        <rect x="14" y="20" width="36" height="20" rx="2" fill="#3B82F6" opacity="0.15"/>
-        <rect x="24" y="44" width="16" height="4" rx="1" fill="#3B82F6" opacity="0.5"/>
-        <circle cx="33" cy="30" r="5" fill="#3B82F6" opacity="0.7"/>
+        <rect x="10" y="16" width="44" height="28" rx="4" fill="#3B82F6" opacity="0.25" />
+        <rect x="10" y="16" width="44" height="28" rx="4" stroke="#3B82F6" strokeWidth="2" />
+        <rect x="14" y="20" width="36" height="20" rx="2" fill="#3B82F6" opacity="0.15" />
+        <rect x="24" y="44" width="16" height="4" rx="1" fill="#3B82F6" opacity="0.5" />
+        <circle cx="33" cy="30" r="5" fill="#3B82F6" opacity="0.7" />
       </svg>
     ),
   },
@@ -71,11 +72,11 @@ const studentCategories = [
         xmlns="http://www.w3.org/2000/svg"
         className="w-14 h-14"
       >
-        <rect x="12" y="24" width="40" height="18" rx="3" fill="#10B981" opacity="0.25"/>
-        <rect x="12" y="24" width="40" height="18" rx="3" stroke="#10B981" strokeWidth="2"/>
-        <rect x="18" y="18" width="28" height="8" rx="2" fill="#10B981" opacity="0.45"/>
-        <line x1="18" y1="42" x2="18" y2="52" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round"/>
-        <line x1="46" y1="42" x2="46" y2="52" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round"/>
+        <rect x="12" y="24" width="40" height="18" rx="3" fill="#10B981" opacity="0.25" />
+        <rect x="12" y="24" width="40" height="18" rx="3" stroke="#10B981" strokeWidth="2" />
+        <rect x="18" y="18" width="28" height="8" rx="2" fill="#10B981" opacity="0.45" />
+        <line x1="18" y1="42" x2="18" y2="52" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="46" y1="42" x2="46" y2="52" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -122,11 +123,11 @@ const studentCategories = [
         xmlns="http://www.w3.org/2000/svg"
         className="w-14 h-14"
       >
-        <rect x="8" y="20" width="48" height="28" rx="10" fill="#8B5CF6" opacity="0.2" stroke="#8B5CF6" strokeWidth="2"/>
-        <line x1="22" y1="34" x2="30" y2="34" stroke="#8B5CF6" strokeWidth="2.5" strokeLinecap="round"/>
-        <line x1="26" y1="30" x2="26" y2="38" stroke="#8B5CF6" strokeWidth="2.5" strokeLinecap="round"/>
-        <circle cx="40" cy="31" r="2.5" fill="#8B5CF6" opacity="0.9"/>
-        <circle cx="46" cy="36" r="2.5" fill="#8B5CF6" opacity="0.9"/>
+        <rect x="8" y="20" width="48" height="28" rx="10" fill="#8B5CF6" opacity="0.2" stroke="#8B5CF6" strokeWidth="2" />
+        <line x1="22" y1="34" x2="30" y2="34" stroke="#8B5CF6" strokeWidth="2.5" strokeLinecap="round" />
+        <line x1="26" y1="30" x2="26" y2="38" stroke="#8B5CF6" strokeWidth="2.5" strokeLinecap="round" />
+        <circle cx="40" cy="31" r="2.5" fill="#8B5CF6" opacity="0.9" />
+        <circle cx="46" cy="36" r="2.5" fill="#8B5CF6" opacity="0.9" />
       </svg>
     ),
   },
@@ -143,10 +144,10 @@ const studentCategories = [
         xmlns="http://www.w3.org/2000/svg"
         className="w-14 h-14"
       >
-        <circle cx="18" cy="44" r="8" fill="none" stroke="#06B6D4" strokeWidth="2.5"/>
-        <circle cx="46" cy="44" r="8" fill="none" stroke="#06B6D4" strokeWidth="2.5"/>
-        <path d="M18 44 L28 20 L40 20 L46 44" stroke="#06B6D4" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M28 20 L32 32 L46 32" stroke="#06B6D4" strokeWidth="2" strokeLinecap="round"/>
+        <circle cx="18" cy="44" r="8" fill="none" stroke="#06B6D4" strokeWidth="2.5" />
+        <circle cx="46" cy="44" r="8" fill="none" stroke="#06B6D4" strokeWidth="2.5" />
+        <path d="M18 44 L28 20 L40 20 L46 44" stroke="#06B6D4" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M28 20 L32 32 L46 32" stroke="#06B6D4" strokeWidth="2" strokeLinecap="round" />
       </svg>
     ),
   },
@@ -343,11 +344,10 @@ export default function MarketplacePage() {
               className="group text-left focus:outline-none"
             >
               <div
-                className={`relative flex flex-col items-center justify-between rounded-2xl overflow-hidden transition-all duration-300 ${
-                  activeCategory === cat.id
+                className={`relative flex flex-col items-center justify-between rounded-2xl overflow-hidden transition-all duration-300 ${activeCategory === cat.id
                     ? "ring-2 ring-offset-2"
                     : "hover:scale-[1.03] hover:shadow-lg"
-                }`}
+                  }`}
                 style={{
                   background: cat.bg,
                   minHeight: "160px",
@@ -459,6 +459,8 @@ export default function MarketplacePage() {
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
       />
+      {/* Floating QR Scanner */}
+      <HomeQRScanner />
     </div>
   );
 }
